@@ -7,10 +7,40 @@
 
 import SwiftUI
 
+
+
 struct ContentView: View {
+    
+    let astronauts: [String: Astronaut] = Bundle.main.decode("astronauts.json")
+    let missions: [Mission] = Bundle.main.decode("missions.json")
+    
+    
+    @State private var showingList = false
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        
+        NavigationView {
+            Group {
+                if showingList == false {
+                    MainViewTable(astronauts: astronauts, missions: missions)
+                }
+                else {
+                    MainViewList(astronauts: astronauts, missions: missions)
+                }
+            }
+            .navigationTitle("Moonshot")
+            .background(.darkBackground)
+            .preferredColorScheme(.dark)
+            .toolbar {
+                ToolbarItem {
+                    Button(showingList == false ? "List View" : "Table View") {
+                        withAnimation {
+                            showingList.toggle()
+                        }
+                    }
+                }
+            }
+        }
     }
 }
 
